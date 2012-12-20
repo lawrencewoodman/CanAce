@@ -1,0 +1,25 @@
+# Object files
+*.o
+
+# Executables
+src/canace
+tests/tape_test
+tests/keyboard_test
+tests/spooler_test
+
+# Makefiles
+Makefile
+
+# Tape files
+/*.tap
+/*.TAP
+
+# Vim Swap files
+*.swp
+
+# CMake files
+CMakeFiles
+CMakeCache.txt
+*.cmake
+/Testing
+/install_manifest.txt
