@@ -17,7 +17,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #/
 proc handle_emu_key {key} {
-  switch $key {
+  switch -- $key {
     F12 {reset_ace}
   }
 }
