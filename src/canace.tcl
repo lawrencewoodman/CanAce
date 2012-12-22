@@ -28,7 +28,9 @@ proc create_window {} {
 }
 
 proc create_screen {} {
-  frame .screen -width 256 -height 192 -background ""
+  set width [expr {[get_scale] * 256}]
+  set height [expr {[get_scale] * 192}]
+  frame .screen -width $width -height $height -background ""
   pack .screen
 }
 

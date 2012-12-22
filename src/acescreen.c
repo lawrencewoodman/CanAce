@@ -33,6 +33,7 @@ static unsigned char video_ram_old[24*32];
 static void AceScreen_embedInWindow(char *windowID);
 static void AceScreen_clear(void);
 static void AceScreen_setPixel(int x, int y, int colour);
+static void AceScreen_rawSetPixel(int x, int y, Uint32 pixel, int bpp);
 static void AceScreen_setCharacter(int x, int y, int inv,
                                    unsigned char *charbmap);
 
@@ -128,16 +129,22 @@ AceScreen_clear(void)
 void
 AceScreen_setPixel(int x, int y, int colour)
 {
+  int sx, sy;
   int bpp = sfScreen->format->BytesPerPixel;
-  /* Here p is the address to the pixel we want to set */
-  Uint8 *p = (Uint8 *)sfScreen->pixels + (y*scale)
-                    * sfScreen->pitch + (x*scale) * bpp;
-  Uint32 pixel;
+  Uint32 pixel = colour ? 0xffffffff : 0;
 
-  if (colour == 0)
-    pixel = 0;
-  else
-    pixel = 0xffffffff;
+  for(sy = 0; sy < scale; sy++) {
+    for(sx = 0; sx < scale; sx++) {
+      AceScreen_rawSetPixel(x*scale+sx, y*scale+sy, pixel, bpp);
+    }
+  }
+}
+
+static void
+AceScreen_rawSetPixel(int x, int y, Uint32 pixel, int bpp)
+{
+  // The address of the pixel we want to set
+  Uint8 *p = (Uint8 *)sfScreen->pixels + (y) * sfScreen->pitch + (x) * bpp;
 
   /* FIX: Could probably just fix at 8 bits depth and therefore assume
    * case 1
@@ -167,17 +174,6 @@ AceScreen_setPixel(int x, int y, int colour)
         *(Uint32 *)p = pixel;
         break;
   }
-
-  /* FIX: Need to scale the pixels as well:
-  int sx, sy;
-  int imageIndex = (y*hsize+x)*SCALE*bytes_per_pixel;
-
-  for(sy = 0; sy < SCALE; sy++) {
-    for(sx = 0; sx < SCALE*bytes_per_pixel; sx++) {
-      image[imageIndex+(sy*hsize*bytes_per_pixel+sx)] = colour;
-    }
-  }
-  */
 }
 
 
