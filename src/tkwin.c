@@ -162,6 +162,21 @@ GetScaleCmd(ClientData clientData, Tcl_Interp *_interp,
   return TCL_OK;
 }
 
+static int
+GetCanAceVersionCmd(ClientData clientData, Tcl_Interp *_interp,
+                    int objc, Tcl_Obj *CONST objv[])
+{
+  int scale;
+
+  if (objc != 1) {
+    Tcl_WrongNumArgs(_interp, 1, objv, "");
+  }
+
+  Tcl_SetObjResult(_interp, Tcl_NewStringObj(CANACE_VERSION, -1));
+
+  return TCL_OK;
+}
+
 
 static void
 TkWin_createCommands(void)
@@ -187,6 +202,10 @@ TkWin_createCommands(void)
                        (Tcl_CmdDeleteProc *) NULL);
 
   Tcl_CreateObjCommand(interp, "get_scale", GetScaleCmd,
+                       (ClientData) NULL,
+                       (Tcl_CmdDeleteProc *) NULL);
+
+  Tcl_CreateObjCommand(interp, "getCanAceVersion", GetCanAceVersionCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 

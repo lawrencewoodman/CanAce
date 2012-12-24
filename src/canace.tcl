@@ -48,10 +48,26 @@ proc get_spool_file {} {
   }
 }
 
-proc create_buttons {} {
-  frame .buttons
+proc displayAbout {} {
+  tk_messageBox -message "CanAce v[getCanAceVersion]" -type ok
+}
 
-  ttk::button .buttons.tape_attach -text {Attach Tape} -command {
+proc create_menu {} {
+  option add *Menu.tearOff 0
+  menu .mbar
+  . configure -menu .mbar
+
+  .mbar add cascade -label File -menu .mbar.file -underline 0
+  .mbar add cascade -label Help -menu .mbar.help -underline 0
+
+  # keyclear is used below to reset the key modifiers because otherwise the
+  # keypress command will register an Alt key being pressed to access the menu,
+  # but will never see it released.  This would mean all following keys would
+  # be ignored by keypress.
+  menu .mbar.file -postcommand {keyclear}
+  menu .mbar.help -postcommand {keyclear}
+
+  .mbar.file add command -label "Attach a Tape" -underline 0 -command {
     set filename [get_tap_file]
 
     if {$filename != ""} {
@@ -60,7 +76,7 @@ proc create_buttons {} {
     focus .screen
   }
 
-  ttk::button .buttons.spool -text {Spool from File} -command {
+  .mbar.file add command -label "Spool from File" -underline 0 -command {
     set filename [get_spool_file]
 
     if {$filename != ""} {
@@ -69,24 +85,25 @@ proc create_buttons {} {
     focus .screen
   }
 
-  ttk::button .buttons.reset -text {Reset} -command {reset_ace; focus .screen}
-  ttk::button .buttons.quit -text {Quit} -command {destroy_window}
+  .mbar.file add command -label "Reset" -underline 0 -command {reset_ace}
 
-  pack .buttons.tape_attach -side left -expand 1 -fill both
-  pack .buttons.spool -side left -expand 1 -fill both
-  pack .buttons.reset -side left -expand 1 -fill both
-  pack .buttons.quit -side left -expand 1 -fill both
-  pack .buttons -side left -expand 1 -fill both
+  .mbar.file add command -label "Quit" -underline 0 -command {destroy_window}
+
+  .mbar.help add command -label "About" -underline 0 -command {displayAbout}
+
 }
 
 proc bind_events {} {
-  #  FIX: make sure spooler isn't active before passing key to keyrelease
-  bind . <KeyPress> {keypress %K; handle_emu_key %K}
+  bind . <KeyPress> {
+    keypress %K
+    handle_emu_key %K
+  }
+
   bind . <KeyRelease> {keyrelease %K}
   bind . <Expose> {screen_refresh}
 }
 
 create_window
+create_menu
 create_screen
-create_buttons
 bind_events

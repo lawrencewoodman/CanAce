@@ -27,6 +27,8 @@ static int KeypressCmd(ClientData clientData, Tcl_Interp *interp,
                        int objc, Tcl_Obj *CONST objv[]);
 static int KeyreleaseCmd(ClientData clientData, Tcl_Interp *interp,
                          int objc, Tcl_Obj *CONST objv[]);
+static int KeyClearCmd(ClientData clientData, Tcl_Interp *_interp,
+                       int objc, Tcl_Obj *CONST objv[]);
 static bool keyModifiersPressed(void);
 static void processKeyModifiers(char *key);
 
@@ -160,6 +162,10 @@ TkKeys_createCommands(Tcl_Interp *interp)
   Tcl_CreateObjCommand(interp, "keyrelease", KeyreleaseCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
+
+  Tcl_CreateObjCommand(interp, "keyclear", KeyClearCmd,
+                       (ClientData) NULL,
+                       (Tcl_CmdDeleteProc *) NULL);
 }
 
 static int
@@ -205,6 +211,21 @@ KeyreleaseCmd(ClientData clientData, Tcl_Interp *interp,
   if (ace_key != AceKey_none && !spooler_active())
     keyboard_keyrelease(ace_key);
 
+  return TCL_OK;
+}
+
+static int
+KeyClearCmd(ClientData clientData, Tcl_Interp *_interp,
+            int objc, Tcl_Obj *CONST objv[])
+{
+  if (objc != 1) {
+    Tcl_WrongNumArgs(_interp, 1, objv, "");
+  }
+
+  keyboard_clear();
+  keyModifiers.control_l = false;
+  keyModifiers.control_r = false;
+  keyModifiers.alt_l = false;
   return TCL_OK;
 }
 
