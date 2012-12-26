@@ -28,6 +28,7 @@ proc handle_emu_key {key} {
 proc create_window {} {
   wm title . {CanAce}
   wm protocol . WM_DELETE_WINDOW {destroy_window}
+  wm resizable . 0 0
 }
 
 proc create_screen {} {
