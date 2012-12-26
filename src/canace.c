@@ -38,6 +38,7 @@
 #include "acescreen.h"
 #include "tkwin.h"
 #include "tkspooler.h"
+#include "tktape.h"
 #include "z80.h"
 #include "tape.h"
 #include "keyboard.h"
@@ -118,37 +119,6 @@ fast_speed(void)
   set_itimer(1000);  /* 1000 ints/sec */
   scrn_freq = 4;
   tsmax = ULONG_MAX;
-}
-
-
-static void
-tape_observer(int tape_attached, int tape_pos,
-  const char tape_filename[TAPE_MAX_FILENAME_SIZE],
-  TapeMessageType message_type, const char message[TAPE_MAX_MESSAGE_SIZE])
-{
-  switch (message_type) {
-    case TAPE_NO_MESSAGE:
-      if (tape_attached)
-        printf("TAPE: %s Pos: %04d\n", tape_filename, tape_pos);
-      break;
-
-    case TAPE_MESSAGE:
-      if (tape_attached)
-        printf("TAPE: %s Pos: %04d - %s\n", tape_filename, tape_pos, message);
-      else
-        printf("TAPE: empty tape Pos: %04d - %s\n", tape_pos, message);
-      break;
-
-    case TAPE_ERROR:
-      if (tape_attached) {
-        fprintf(stderr, "TAPE: %s Pos: %04d - Error: %s\n",
-                tape_filename, tape_pos, message);
-      } else {
-        fprintf(stderr, "TAPE: empty tape Pos: %04d - Error: %s\n",
-                tape_pos, message);
-      }
-      break;
-  }
 }
 
 void
@@ -233,7 +203,7 @@ main(int argc, char **argv)
   setup_sighandlers();
   normal_speed();
   handle_cli_args(argc, argv);
-  tape_add_observer(tape_observer);
+  tape_init(TkTape_observer);
   keyboard_init();
 
   mainloop();
@@ -320,5 +290,4 @@ closedown(void)
 {
   spooler_close();
   tape_detach();
-  tape_clear_observers();
 }

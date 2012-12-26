@@ -39,12 +39,9 @@ typedef enum TapeMessageType {
  * message - The message to pass on
  */
 typedef void (*TapeObserver)(int tape_attached, int tape_pos,
-  const char _tape_filename[TAPE_MAX_FILENAME_SIZE],
-  TapeMessageType message_type,
-  const char message[TAPE_MAX_MESSAGE_SIZE]);
+  TapeMessageType message_type, char *message);
 
-void tape_clear_observers(void);
-void tape_add_observer(TapeObserver tape_observer);
+extern void tape_init(TapeObserver tape_observer_func);
 extern void tape_patches(char *mem);
 extern FILE* tape_attach(char *filename);
 extern void tape_detach();

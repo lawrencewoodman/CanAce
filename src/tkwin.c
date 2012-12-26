@@ -25,7 +25,8 @@
 #include "tape.h"
 #include "spooler.h"
 #include "tkkeys.h"
-
+#include "tkspooler.h"
+#include "tktape.h"
 
 static Tcl_Interp *interp;
 
@@ -41,6 +42,7 @@ TkWin_init(void)
 
   TkWin_createCommands();
   TkSpooler_init(interp);
+  TkTape_init(interp);
 
   if (Tcl_EvalFile(interp, "src/canace.tcl") == TCL_ERROR ) {
     fprintf(stderr, "Error: Can't eval src/canace.tcl\n");
