@@ -46,7 +46,7 @@ proc create_statusbar {} {
 
 proc ClearStatusBar {} {
   global statusMsg
-  unset statusMsg
+  set statusMsg ""
 }
 
 proc get_tap_file {} {
