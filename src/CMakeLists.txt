@@ -1,5 +1,5 @@
 add_definitions(-DSCALE=2 -DCANACE_VERSION=\"0.1\")
-add_executable(canace canace.c tkwin.c tkkeys acescreen.c z80.c tape.c keyboard.c spooler.c)
+add_executable(canace canace.c tkwin.c tkkeys.c tkspooler.c acescreen.c z80.c tape.c keyboard.c spooler.c)
 
 find_package(TCL)
 find_package(SDL)

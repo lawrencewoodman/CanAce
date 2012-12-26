@@ -31,15 +31,18 @@ static enum {
 static SpoolerObserver spooler_observer = NULL;
 static ClearKeyboardFunc clear_keyboard = NULL;
 static KeypressFunc keypress = NULL;
+static NormalSpeedFunc normal_speed = NULL;
 
 void
 spooler_init(SpoolerObserver spooler_observer_func,
              ClearKeyboardFunc clear_keyboard_func,
-             KeypressFunc keypress_func)
+             KeypressFunc keypress_func,
+             NormalSpeedFunc normal_speed_func)
 {
   spooler_observer = spooler_observer_func;
   clear_keyboard = clear_keyboard_func;
   keypress = keypress_func;
+  normal_speed = normal_speed_func;
   spooler_state = SPOOLER_INACTIVE;
 }
 
@@ -65,6 +68,7 @@ spooler_close(void)
 {
   if (spooler_active()) {
     fclose(spooler_file);
+    normal_speed();
     clear_keyboard();
     spooler_file = NULL;
     spooler_state = SPOOLER_INACTIVE;

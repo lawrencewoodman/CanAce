@@ -37,6 +37,7 @@
 
 #include "acescreen.h"
 #include "tkwin.h"
+#include "tkspooler.h"
 #include "z80.h"
 #include "tape.h"
 #include "keyboard.h"
@@ -150,29 +151,6 @@ tape_observer(int tape_attached, int tape_pos,
   }
 }
 
-static void
-spooler_observer(SpoolerMessage message)
-{
-  switch (message) {
-    case SPOOLER_OPENED:
-      printf("Opened spool file.\n");
-      break;
-
-    case SPOOLER_OPEN_ERROR:
-      fprintf(stderr, "Couldn't open spool file.\n");
-      break;
-
-    case SPOOLER_CLOSED:
-      normal_speed();
-      printf("Closed spool file.\n");
-      break;
-
-    case SPOOLER_ALREADY_SPOOLING:
-      printf("The spooler is already spooling.\n");
-      break;
-  }
-}
-
 void
 handle_cli_args(int argc, char **argv)
 {
@@ -250,7 +228,8 @@ main(int argc, char **argv)
   if (!AceScreen_init(TkWin_getWindowID(), SCALE, mem+0x2400, mem+0x2C00))
     return EXIT_FAILURE;
 
-  spooler_init(spooler_observer, keyboard_clear, keyboard_keypress);
+  spooler_init(TkSpooler_observer, keyboard_clear, keyboard_keypress,
+               normal_speed);
   setup_sighandlers();
   normal_speed();
   handle_cli_args(argc, argv);

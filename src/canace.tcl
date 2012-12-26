@@ -18,7 +18,10 @@
 #/
 proc handle_emu_key {key} {
   switch -- $key {
-    F12 {reset_ace}
+    F12 {
+      reset_ace
+      ClearStatusBar
+    }
   }
 }
 
@@ -31,7 +34,18 @@ proc create_screen {} {
   set width [expr {[get_scale] * 256}]
   set height [expr {[get_scale] * 192}]
   frame .screen -width $width -height $height -background ""
-  pack .screen
+  grid .screen
+}
+
+proc create_statusbar {} {
+  set width [expr {[get_scale] * 256}]
+  ttk::label .status -textvariable statusMsg -relief sunken -padding 1m
+  grid .status -sticky ew
+}
+
+proc ClearStatusBar {} {
+  global statusMsg
+  unset statusMsg
 }
 
 proc get_tap_file {} {
@@ -85,7 +99,10 @@ proc create_menu {} {
     focus .screen
   }
 
-  .mbar.file add command -label "Reset" -underline 0 -command {reset_ace}
+  .mbar.file add command -label "Reset" -underline 0 -command {
+    reset_ace
+    ClearStatusBar
+  }
 
   .mbar.file add command -label "Quit" -underline 0 -command {destroy_window}
 
@@ -106,4 +123,6 @@ proc bind_events {} {
 create_window
 create_menu
 create_screen
+create_statusbar
+
 bind_events

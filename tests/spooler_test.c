@@ -28,6 +28,7 @@ static struct {
   int observer_called;
   int clear_keyboard_called;
   int keypress_called;
+  int normal_speed_called;
   AceKey keypress_key;
   SpoolerMessage message;
 } observer_status;
@@ -38,6 +39,7 @@ observer_status_init(void)
   observer_status.observer_called = 0;
   observer_status.clear_keyboard_called = 0;
   observer_status.keypress_called = 0;
+  observer_status.normal_speed_called = 0;
   observer_status.keypress_key = AceKey_none;
   observer_status.message = SPOOLER_NO_MESSAGE;
 }
@@ -62,6 +64,11 @@ keypress(AceKey aceKey)
   observer_status.keypress_key = aceKey;
 }
 
+static void
+normal_speed(void)
+{
+  observer_status.normal_speed_called = 1;
+}
 
 static void
 test_spooler_open_successful()
@@ -69,7 +76,7 @@ test_spooler_open_successful()
   char *filename = "fixtures/star.spool";
 
   observer_status_init();
-  spooler_init(spooler_observer, clear_keyboard, NULL);
+  spooler_init(spooler_observer, clear_keyboard, NULL, normal_speed);
   spooler_open(filename);
 
   assert(observer_status.observer_called);
@@ -85,7 +92,7 @@ test_spooler_open_unsuccessful()
   char *filename = tmpnam(NULL);
 
   observer_status_init();
-  spooler_init(spooler_observer, NULL, NULL);
+  spooler_init(spooler_observer, NULL, NULL, normal_speed);
   spooler_open(filename);
 
   assert(observer_status.observer_called);
@@ -99,12 +106,13 @@ test_spooler_close()
   char *filename = "fixtures/star.spool";
 
   observer_status_init();
-  spooler_init(spooler_observer, clear_keyboard, NULL);
+  spooler_init(spooler_observer, clear_keyboard, NULL, normal_speed);
   spooler_open(filename);
   spooler_close();
 
   assert(observer_status.observer_called);
   assert(observer_status.clear_keyboard_called);
+  assert(observer_status.normal_speed_called);
   assert(observer_status.message == SPOOLER_CLOSED);
   assert(!spooler_active());
 }
@@ -116,7 +124,7 @@ test_spooler_read()
   char *filename = "fixtures/star.spool";
   char *comparison_text = ": star 42 emit ;\n";
 
-  spooler_init(spooler_observer, clear_keyboard, keypress);
+  spooler_init(spooler_observer, clear_keyboard, keypress, normal_speed);
   spooler_open(filename);
 
   for (text_pos = 0; text_pos < strlen(comparison_text); text_pos++) {
@@ -135,6 +143,7 @@ test_spooler_read()
   observer_status_init();
   spooler_read();
   assert(observer_status.observer_called);
+  assert(observer_status.normal_speed_called);
   assert(observer_status.message == SPOOLER_CLOSED);
 }
 
@@ -145,7 +154,7 @@ test_spooler_read_after_close_no_action()
   char *filename = "fixtures/star.spool";
   char *comparison_text = ": star 42 emit ;\n";
 
-  spooler_init(spooler_observer, clear_keyboard, keypress);
+  spooler_init(spooler_observer, clear_keyboard, keypress, normal_speed);
   spooler_open(filename);
 
   for (text_pos = 0; text_pos < strlen(comparison_text); text_pos++) {
@@ -160,6 +169,7 @@ test_spooler_read_after_close_no_action()
   observer_status_init();
   assert(!observer_status.observer_called);
   assert(!observer_status.keypress_called);
+  assert(!observer_status.normal_speed_called);
   assert(!observer_status.clear_keyboard_called);
 }
 

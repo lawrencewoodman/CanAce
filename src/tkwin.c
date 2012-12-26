@@ -40,6 +40,7 @@ TkWin_init(void)
   if (Tk_Init(interp) == TCL_ERROR) { return 0; }
 
   TkWin_createCommands();
+  TkSpooler_init(interp);
 
   if (Tcl_EvalFile(interp, "src/canace.tcl") == TCL_ERROR ) {
     fprintf(stderr, "Error: Can't eval src/canace.tcl\n");

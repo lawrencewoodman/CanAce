@@ -32,10 +32,12 @@ typedef enum SpoolerMessage {
 typedef void (*SpoolerObserver)(SpoolerMessage message);
 typedef void (*ClearKeyboardFunc)(void);
 typedef void (*KeypressFunc)(AceKey aceKey);
+typedef void (*NormalSpeedFunc)(void);
 
 extern void spooler_init(SpoolerObserver spooler_observer_func,
                          ClearKeyboardFunc clear_keyboard_func,
-                         KeypressFunc keypress_func);
+                         KeypressFunc keypress_func,
+                         NormalSpeedFunc normal_speed_func);
 extern void spooler_open(char *filename);
 extern void spooler_close(void);
 extern void spooler_read(void);
