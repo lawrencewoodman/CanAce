@@ -92,7 +92,6 @@ AceScreen_refresh(void)
   for (y = 0; y < 24; y++) {
     for (x = 0; x < 32; x++, video_ram_ofs++, video_ram_old_ofs++) {
       c = video_ram[video_ram_ofs];
-      //if (c != video_ram_old[video_ram_old_ofs] || refresh_screen) {
       if (c != video_ram_old[video_ram_old_ofs]) {
         video_ram_old[video_ram_old_ofs] = c;
 
@@ -105,8 +104,6 @@ AceScreen_refresh(void)
   }
 
   SDL_Flip(sfScreen);
-
-  //refresh_screen = 0;
 }
 
 SDL_Surface *

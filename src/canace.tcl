@@ -40,7 +40,6 @@ proc CreateScreen {} {
 }
 
 proc CreateStatusBar {} {
-  set width [expr {[GetScale] * 256}]
   ttk::label .status -textvariable StatusMsg -relief sunken -padding 1m
   grid .status -sticky ew
 }
