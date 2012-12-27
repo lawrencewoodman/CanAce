@@ -21,6 +21,7 @@
 
 const int screen_width = 256;
 const int screen_height = 192;
+const int borderWidth = 20;
 
 static SDL_Surface *sfScreen = NULL;
 static int scale = 1;
@@ -55,8 +56,9 @@ AceScreen_init(char *windowID, int _scale, unsigned char *_video_ram,
     return 0;
   }
 
-  sfScreen = SDL_SetVideoMode(screen_width*scale, screen_height*scale, 0,
-                              SDL_NOFRAME|SDL_SWSURFACE|SDL_ANYFORMAT);
+  sfScreen = SDL_SetVideoMode(((2*borderWidth) + screen_width) * scale,
+                              ((2*borderWidth) + screen_height) * scale,
+                              0, SDL_NOFRAME|SDL_SWSURFACE|SDL_ANYFORMAT);
   if (sfScreen == NULL) {
     fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
     return 0;
@@ -135,7 +137,8 @@ AceScreen_setPixel(int x, int y, int colour)
 
   for(sy = 0; sy < scale; sy++) {
     for(sx = 0; sx < scale; sx++) {
-      AceScreen_rawSetPixel(x*scale+sx, y*scale+sy, pixel, bpp);
+      AceScreen_rawSetPixel((borderWidth+x)*scale+sx, (borderWidth+y)*scale+sy,
+                            pixel, bpp);
     }
   }
 }

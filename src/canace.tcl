@@ -32,8 +32,9 @@ proc CreateWindow {} {
 }
 
 proc CreateScreen {} {
-  set width [expr {[GetScale] * 256}]
-  set height [expr {[GetScale] * 192}]
+  set border [expr {2 * 20 * [GetScale]}]
+  set width [expr {([GetScale] * 256) + $border}]
+  set height [expr {([GetScale] * 192) + $border}]
   frame .screen -width $width -height $height -background ""
   grid .screen
 }
