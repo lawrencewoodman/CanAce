@@ -21,12 +21,37 @@
 #include "tape.h"
 
 static Tcl_Interp *interp;
+static int TapeAttachCmd(ClientData clientData, Tcl_Interp *_interp,
+                         int objc, Tcl_Obj *CONST objv[]);
 
 void
 TkTape_init(Tcl_Interp *_interp)
 {
   interp = _interp;
+
+  Tcl_CreateObjCommand(interp, "TapeAttach", TapeAttachCmd,
+                       (ClientData) NULL,
+                       (Tcl_CmdDeleteProc *) NULL);
 }
+
+static int
+TapeAttachCmd(ClientData clientData, Tcl_Interp *_interp,
+              int objc, Tcl_Obj *CONST objv[])
+{
+  char *filename;
+
+  if (objc != 2) {
+    Tcl_WrongNumArgs(_interp, 1, objv, "filename");
+    return TCL_ERROR;
+  }
+
+  filename = Tcl_GetString(objv[1]);
+  // FIX: Check success of command below?
+  tape_attach(filename);
+
+  return TCL_OK;
+}
+
 
 void
 TkTape_observer(int tape_attached, int tape_pos,
