@@ -16,58 +16,58 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #/
-proc handle_emu_key {key} {
+proc HandleEmuKey {key} {
   switch -- $key {
     F12 {
-      reset_ace
+      ResetAce
       ClearStatusBar
     }
   }
 }
 
-proc create_window {} {
+proc CreateWindow {} {
   wm title . {CanAce}
-  wm protocol . WM_DELETE_WINDOW {destroy_window}
+  wm protocol . WM_DELETE_WINDOW {DestroyWindow}
   wm resizable . 0 0
 }
 
-proc create_screen {} {
-  set width [expr {[get_scale] * 256}]
-  set height [expr {[get_scale] * 192}]
+proc CreateScreen {} {
+  set width [expr {[GetScale] * 256}]
+  set height [expr {[GetScale] * 192}]
   frame .screen -width $width -height $height -background ""
   grid .screen
 }
 
-proc create_statusbar {} {
-  set width [expr {[get_scale] * 256}]
-  ttk::label .status -textvariable statusMsg -relief sunken -padding 1m
+proc CreateStatusBar {} {
+  set width [expr {[GetScale] * 256}]
+  ttk::label .status -textvariable StatusMsg -relief sunken -padding 1m
   grid .status -sticky ew
 }
 
 proc ClearStatusBar {} {
-  global statusMsg
-  set statusMsg ""
+  global StatusMsg
+  set StatusMsg ""
 }
 
-proc get_tap_file {} {
+proc GetTapFile {} {
   tk_getOpenFile -filetypes {
     {{Tape file} {.tap .Tap .TAP}}
     {{All files} *}
   }
 }
 
-proc get_spool_file {} {
+proc GetSpoolFile {} {
   tk_getOpenFile -filetypes {
     {{Spool file} {.spool .Spool .SPOOL}}
     {{All files} *}
   }
 }
 
-proc displayAbout {} {
-  tk_messageBox -message "CanAce v[getCanAceVersion]" -type ok
+proc DisplayAbout {} {
+  tk_messageBox -message "CanAce v[GetCanAceVersion]" -type ok
 }
 
-proc create_menu {} {
+proc CreateMenu {} {
   option add *Menu.tearOff 0
   menu .mbar
   . configure -menu .mbar
@@ -75,55 +75,55 @@ proc create_menu {} {
   .mbar add cascade -label File -menu .mbar.file -underline 0
   .mbar add cascade -label Help -menu .mbar.help -underline 0
 
-  # keyclear is used below to reset the key modifiers because otherwise the
-  # keypress command will register an Alt key being pressed to access the menu,
+  # KeyClear is used below to reset the key modifiers because otherwise the
+  # KeyPress command will register an Alt key being pressed to access the menu,
   # but will never see it released.  This would mean all following keys would
-  # be ignored by keypress.
-  menu .mbar.file -postcommand {keyclear}
-  menu .mbar.help -postcommand {keyclear}
+  # be ignored by KeyPress.
+  menu .mbar.file -postcommand {KeyClear}
+  menu .mbar.help -postcommand {KeyClear}
 
   .mbar.file add command -label "Attach a Tape" -underline 0 -command {
-    set filename [get_tap_file]
+    set filename [GetTapFile]
 
     if {$filename != ""} {
-      tape_attach $filename
+      TapeAttach $filename
     }
     focus .screen
   }
 
   .mbar.file add command -label "Spool from File" -underline 0 -command {
-    set filename [get_spool_file]
+    set filename [GetSpoolFile]
 
     if {$filename != ""} {
-      spool $filename
+      Spool $filename
     }
     focus .screen
   }
 
   .mbar.file add command -label "Reset" -underline 0 -command {
-    reset_ace
+    ResetAce
     ClearStatusBar
   }
 
-  .mbar.file add command -label "Quit" -underline 0 -command {destroy_window}
+  .mbar.file add command -label "Quit" -underline 0 -command {DestroyWindow}
 
-  .mbar.help add command -label "About" -underline 0 -command {displayAbout}
+  .mbar.help add command -label "About" -underline 0 -command {DisplayAbout}
 
 }
 
-proc bind_events {} {
+proc BindEvents {} {
   bind . <KeyPress> {
-    keypress %K
-    handle_emu_key %K
+    KeyPress %K
+    HandleEmuKey %K
   }
 
-  bind . <KeyRelease> {keyrelease %K}
-  bind . <Expose> {screen_refresh}
+  bind . <KeyRelease> {KeyRelease %K}
+  bind . <Expose> {ScreenRefresh}
 }
 
-create_window
-create_menu
-create_screen
-create_statusbar
+CreateWindow
+CreateMenu
+CreateScreen
+CreateStatusBar
 
-bind_events
+BindEvents

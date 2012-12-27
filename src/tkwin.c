@@ -184,31 +184,31 @@ GetCanAceVersionCmd(ClientData clientData, Tcl_Interp *_interp,
 static void
 TkWin_createCommands(void)
 {
-  Tcl_CreateObjCommand(interp, "destroy_window", DestroyWindowCmd,
+  Tcl_CreateObjCommand(interp, "DestroyWindow", DestroyWindowCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "screen_refresh", ScreenRefreshCmd,
+  Tcl_CreateObjCommand(interp, "ScreenRefresh", ScreenRefreshCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "reset_ace", ResetAceCmd,
+  Tcl_CreateObjCommand(interp, "ResetAce", ResetAceCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "tape_attach", TapeAttachCmd,
+  Tcl_CreateObjCommand(interp, "TapeAttach", TapeAttachCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "spool", SpoolCmd,
+  Tcl_CreateObjCommand(interp, "Spool", SpoolCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "get_scale", GetScaleCmd,
+  Tcl_CreateObjCommand(interp, "GetScale", GetScaleCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "getCanAceVersion", GetCanAceVersionCmd,
+  Tcl_CreateObjCommand(interp, "GetCanAceVersion", GetCanAceVersionCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 

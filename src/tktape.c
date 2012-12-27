@@ -58,5 +58,5 @@ TkTape_observer(int tape_attached, int tape_pos,
       break;
   }
 
-  Tcl_SetVar(interp, "statusMsg", statusMsg, 0);
+  Tcl_SetVar(interp, "StatusMsg", statusMsg, 0);
 }

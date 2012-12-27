@@ -155,15 +155,15 @@ static struct {
 void
 TkKeys_createCommands(Tcl_Interp *interp)
 {
-  Tcl_CreateObjCommand(interp, "keypress", KeypressCmd,
+  Tcl_CreateObjCommand(interp, "KeyPress", KeypressCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "keyrelease", KeyreleaseCmd,
+  Tcl_CreateObjCommand(interp, "KeyRelease", KeyreleaseCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
-  Tcl_CreateObjCommand(interp, "keyclear", KeyClearCmd,
+  Tcl_CreateObjCommand(interp, "KeyClear", KeyClearCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 }
