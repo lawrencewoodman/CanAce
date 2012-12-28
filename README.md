@@ -52,7 +52,7 @@ To make the emulator easier to use the following keys are mapped:
 
 Loading/Saving External Files
 -----------------------------
-You can attach a tape by clicking on the '_Attach Tape_' button.
+You can attach a tape by clicking on the _'Attach Tape'_ button.
 Once done, from that point any loading or saving is done to the selected file.
 
 _It is important to note that when you save, the rest of the file is
@@ -61,7 +61,7 @@ truncated._
 Spooling
 --------
 You can spool text into the emulator from an external file by clicking on the
-'_Spool from File_' button.
+_'Spool from File'_ button.
 
 Alternatively you can use the -s command line switch e.g.
 
@@ -82,7 +82,7 @@ distributing the ROM with the emulator: boldcomp.email.txt.
 Useful Links
 ------------
 * The [CanAce](https://lawrencewoodman.github.com/CanAce/) project page.
-* The [Jupiter Ace Resource Site](http://www.jupiter-ace.co.uk) is highly recommended.  You will find lots of information here about the ACE, in addition to a great software archive (most of the .TAP files work with CanAce) and an active forum.
+* The [Jupiter Ace Resource Site](http://www.jupiter-ace.co.uk) is highly recommended.  You will find lots of information about the ACE, in addition to an active forum and a great software archive (most of the .TAP files work with CanAce).
 
 Credits
 --------
