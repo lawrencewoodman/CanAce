@@ -68,7 +68,7 @@ int memattr[8]={0,1,1,1,1,1,1,1}; /* 8K RAM Banks */
  *   2 Processing Interrupt
  */
 volatile int interrupted=0;
-int scrn_freq=2;
+const int scrn_freq=4;
 
 /* Prototypes */
 void loadrom(unsigned char *x);
@@ -109,7 +109,6 @@ static void
 normal_speed(void)
 {
   set_itimer(50);    /* 50 ints/sec */
-  scrn_freq = 4;
   tsmax = 62500;
 }
 
@@ -117,7 +116,6 @@ static void
 fast_speed(void)
 {
   set_itimer(1000);  /* 1000 ints/sec */
-  scrn_freq = 4;
   tsmax = ULONG_MAX;
 }
 
