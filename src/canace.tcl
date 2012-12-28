@@ -25,10 +25,26 @@ proc HandleEmuKey {key} {
   }
 }
 
+# toggle: on or off
+# Uses 'xset' so X dependent.
+proc KeyAutoRepeat {toggle} {
+  if {[string tolower $toggle] eq "on"} {
+    exec xset r on
+  } else {
+    exec xset r off
+  }
+}
+
+proc Quit {} {
+  KeyAutoRepeat on
+  DestroyWindow
+}
+
 proc CreateWindow {} {
   wm title . {CanAce}
-  wm protocol . WM_DELETE_WINDOW {DestroyWindow}
+  wm protocol . WM_DELETE_WINDOW {Quit}
   wm resizable . 0 0
+  KeyAutoRepeat off
 }
 
 proc CreateScreen {} {
@@ -105,7 +121,7 @@ proc CreateMenu {} {
     ClearStatusBar
   }
 
-  .mbar.file add command -label "Quit" -underline 0 -command {DestroyWindow}
+  .mbar.file add command -label "Quit" -underline 0 -command {Quit}
 
   .mbar.help add command -label "About" -underline 0 -command {DisplayAbout}
 
