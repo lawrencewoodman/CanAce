@@ -13,7 +13,8 @@ CanAce is derived from [xAce](http://lawrencewoodman.github.com/xAce/) which was
 
 Requirements
 ------------
-*  Tcl/Tk 8.5+
+*  A C/C++ compiler (Currently tested with gcc and g++)
+*  Tcl/Tk 8.5+ and development files
 *  SDL Library and development files
 *  CMake 2.8+ (To compile)
 
