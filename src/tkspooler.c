@@ -22,10 +22,24 @@
 
 static Tcl_Interp *interp;
 
+// Prototypes
+static int SpoolReadCmd(ClientData clientData, Tcl_Interp *_interp,
+                        int objc, Tcl_Obj *CONST objv[]);
+static int SpoolCmd(ClientData clientData, Tcl_Interp *_interp,
+                    int objc, Tcl_Obj *CONST objv[]);
+
 void
 TkSpooler_init(Tcl_Interp *_interp)
 {
   interp = _interp;
+
+  Tcl_CreateObjCommand(interp, "Spool", SpoolCmd,
+                       (ClientData) NULL,
+                       (Tcl_CmdDeleteProc *) NULL);
+
+  Tcl_CreateObjCommand(interp, "SpoolRead", SpoolReadCmd,
+                       (ClientData) NULL,
+                       (Tcl_CmdDeleteProc *) NULL);
 }
 
 void
@@ -49,4 +63,35 @@ TkSpooler_observer(SpoolerMessage message)
       Tcl_SetVar(interp, "StatusMsg", "The spooler is already spooling.", 0);
       break;
   }
+}
+
+static int
+SpoolCmd(ClientData clientData, Tcl_Interp *_interp,
+         int objc, Tcl_Obj *CONST objv[])
+{
+  char *filename;
+
+  if (objc != 2) {
+    Tcl_WrongNumArgs(_interp, 1, objv, "filename");
+    return TCL_ERROR;
+  }
+
+  filename = Tcl_GetString(objv[1]);
+  // FIX: Check success of command below?
+  spooler_open(filename);
+
+  return TCL_OK;
+}
+
+static int
+SpoolReadCmd(ClientData clientData, Tcl_Interp *_interp,
+             int objc, Tcl_Obj *CONST objv[])
+{
+  if (objc != 1) {
+    Tcl_WrongNumArgs(_interp, 1, objv, "");
+    return TCL_ERROR;
+  }
+
+  spooler_read();
+  return TCL_OK;
 }

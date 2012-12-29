@@ -65,10 +65,8 @@ int memattr[8]={0,1,1,1,1,1,1,1}; /* 8K RAM Banks */
  * interrupted states:
  *   0 No interrupt
  *   1 Interrupted
- *   2 Processing Interrupt
  */
 volatile int interrupted=0;
-const int scrn_freq=4;
 
 /* Prototypes */
 void loadrom(unsigned char *x);
@@ -115,7 +113,7 @@ normal_speed(void)
 static void
 fast_speed(void)
 {
-  set_itimer(1000);  /* 1000 ints/sec */
+  set_itimer(250);  /* 250 ints/sec */
   tsmax = ULONG_MAX;
 }
 
@@ -266,21 +264,8 @@ fix_tstates(void)
 void
 do_interrupt(void)
 {
-  static int count=0;
-  if (interrupted == 1) {
-    interrupted = 2;
-
-    /* only do refresh() every 1/Nth */
-    count++;
-    if (count >= scrn_freq) {
-      count=0;
-      spooler_read();
-      AceScreen_refresh();
-    }
-    check_events();
-
-    interrupted = 0;
-  }
+  AceScreen_refresh();
+  check_events();
 }
 
 void

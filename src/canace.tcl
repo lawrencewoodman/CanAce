@@ -137,9 +137,19 @@ proc BindEvents {} {
   bind . <Expose> {ScreenRefresh}
 }
 
+# Reads a char from the spool file every x milliseconds
+proc SpoolerTimer {} {
+  after 10 {
+    SpoolRead
+    after idle {after 0 SpoolerTimer}
+  }
+}
+
 CreateWindow
 CreateMenu
 CreateScreen
 CreateStatusBar
+
+SpoolerTimer
 
 BindEvents

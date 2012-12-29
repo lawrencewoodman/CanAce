@@ -114,23 +114,6 @@ ResetAceCmd(ClientData clientData, Tcl_Interp *_interp,
   return TCL_OK;
 }
 
-static int
-SpoolCmd(ClientData clientData, Tcl_Interp *_interp,
-         int objc, Tcl_Obj *CONST objv[])
-{
-  char *filename;
-
-  if (objc != 2) {
-    Tcl_WrongNumArgs(_interp, 1, objv, "filename");
-    return TCL_ERROR;
-  }
-
-  filename = Tcl_GetString(objv[1]);
-  // FIX: Check success of command below?
-  spooler_open(filename);
-
-  return TCL_OK;
-}
 
 static int
 GetScaleCmd(ClientData clientData, Tcl_Interp *_interp,
@@ -175,10 +158,6 @@ TkWin_createCommands(void)
                        (Tcl_CmdDeleteProc *) NULL);
 
   Tcl_CreateObjCommand(interp, "ResetAce", ResetAceCmd,
-                       (ClientData) NULL,
-                       (Tcl_CmdDeleteProc *) NULL);
-
-  Tcl_CreateObjCommand(interp, "Spool", SpoolCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 
