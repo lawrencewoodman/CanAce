@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "z80.h"
 #include "tape.h"
 
 static void tape_notify_observer(TapeMessageType message_type, char *message);
