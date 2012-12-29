@@ -69,14 +69,14 @@ proc GetTapFile {} {
   tk_getOpenFile -filetypes {
     {{Tape file} {.tap .Tap .TAP}}
     {{All files} *}
-  }
+  } -title "Select a tape image"
 }
 
 proc GetSpoolFile {} {
   tk_getOpenFile -filetypes {
     {{Spool file} {.spool .Spool .SPOOL}}
     {{All files} *}
-  }
+  } -title "Select a text file to spool"
 }
 
 proc DisplayAbout {} {
