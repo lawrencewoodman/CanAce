@@ -81,7 +81,7 @@ distributing the ROM with the emulator: boldcomp.email.txt.
 
 Useful Links
 ------------
-* The [CanAce Development Google Group](http://groups.google.com/group/canace-dev).  Where you can play your part in discussing and shaping the direction of CanAce.
+* The [CanAce Development Google Group](http://groups.google.com/group/canace-dev).  Where you can take part in discussing and shaping the direction of CanAce.
 * The [Jupiter Ace Resource Site](http://www.jupiter-ace.co.uk) is highly recommended.  You will find lots of information about the ACE, in addition to an active forum and a great software archive (most of the .TAP files work with CanAce).
 
 Credits
