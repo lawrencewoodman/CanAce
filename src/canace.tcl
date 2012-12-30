@@ -139,10 +139,8 @@ proc BindEvents {} {
 
 # Reads a char from the spool file every x milliseconds
 proc SpoolerTimer {} {
-  after 10 {
-    SpoolRead
-    after idle {after 0 SpoolerTimer}
-  }
+  SpoolRead
+  after idle {after 15 {SpoolerTimer}}
 }
 
 CreateWindow
