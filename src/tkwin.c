@@ -145,6 +145,23 @@ GetCanAceVersionCmd(ClientData clientData, Tcl_Interp *_interp,
   return TCL_OK;
 }
 
+static int
+GetSpeedCmd(ClientData clientData, Tcl_Interp *_interp,
+            int objc, Tcl_Obj *CONST objv[])
+{
+  float mhz;
+  extern unsigned long tsmax;
+
+  if (objc != 1) {
+    Tcl_WrongNumArgs(_interp, 1, objv, "");
+  }
+
+  mhz = (tsmax * 50)/1000000.0;
+  Tcl_SetObjResult(_interp, Tcl_NewDoubleObj(mhz));
+
+  return TCL_OK;
+}
+
 
 static void
 TkWin_createCommands(void)
@@ -166,6 +183,10 @@ TkWin_createCommands(void)
                        (Tcl_CmdDeleteProc *) NULL);
 
   Tcl_CreateObjCommand(interp, "GetCanAceVersion", GetCanAceVersionCmd,
+                       (ClientData) NULL,
+                       (Tcl_CmdDeleteProc *) NULL);
+
+  Tcl_CreateObjCommand(interp, "GetSpeed", GetSpeedCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 

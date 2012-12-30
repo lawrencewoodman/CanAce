@@ -56,7 +56,7 @@ unsigned char *memptr[8] = {
   mem+0xe000
 };
 
-unsigned long tstates=0,tsmax=62500;
+unsigned long tstates=0,tsmax=65000;
 
 int memattr[8]={0,1,1,1,1,1,1,1}; /* 8K RAM Banks */
 
@@ -107,14 +107,14 @@ static void
 normal_speed(void)
 {
   set_itimer(50);    /* 50 ints/sec */
-  tsmax = 62500;
+  tsmax = 65000;
 }
 
 static void
 fast_speed(void)
 {
   set_itimer(250);  /* 250 ints/sec */
-  tsmax = ULONG_MAX;
+  tsmax = 325000;
 }
 
 void
