@@ -44,7 +44,6 @@ proc CreateWindow {} {
   wm title . {CanAce}
   wm protocol . WM_DELETE_WINDOW {Quit}
   wm resizable . 0 0
-  KeyAutoRepeat off
 }
 
 proc CreateScreen {} {
@@ -134,7 +133,8 @@ proc BindEvents {} {
   }
 
   bind . <KeyRelease> {KeyRelease %K}
-  bind . <Expose> {ScreenRefresh}
+  bind . <FocusIn> {KeyAutoRepeat off}
+  bind . <FocusOut> {KeyAutoRepeat on}
 }
 
 # Reads a char from the spool file every x milliseconds
