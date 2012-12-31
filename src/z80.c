@@ -2,6 +2,7 @@
  * Copyright (C) 1994 Ian Collier.
  * Z81 changes (C) 1995 Russell Marks.
  * xace changes (C) 1997 Edward Patel.
+ * changes (C) 2012 Lawrence Woodman.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,21 +54,35 @@ reset_ace(void)
 }
 
 void
+correctSpeed(void)
+{
+  extern unsigned long tstates;
+  extern unsigned long tsmax;
+
+  if (tstates > tsmax) {
+    tstates = 0;
+    pause();
+  }
+}
+
+
+void
 mainloop(void) {
+  extern unsigned long tstates;
   unsigned char a, f, b, c, d, e, h, l;
   unsigned char r, a1, f1, b1, c1, d1, e1, h1, l1, i, iff1, iff2, im;
   unsigned short pc;
   unsigned short ix, iy, sp;
-  extern unsigned long tstates,tsmax;
   unsigned int radjust;
   unsigned char ixoriy, new_ixoriy;
   unsigned char intsample;
   unsigned char op;
-  
+
   a=f=b=c=d=e=h=l=a1=f1=b1=c1=d1=e1=h1=l1=i=r=iff1=iff2=im=0;
   ixoriy=new_ixoriy=0;
   ix=iy=sp=pc=0;
   tstates=radjust=0;
+
   while(1) {
     ixoriy=new_ixoriy;
     new_ixoriy=0;
@@ -79,9 +94,6 @@ mainloop(void) {
     switch(op) {
       #include "z80ops.c"
     }
-
-    if(tstates>tsmax)
-      fix_tstates();
 
     if(interrupted == 1 && intsample && iff1) {
       do_interrupt();
@@ -98,7 +110,7 @@ mainloop(void) {
       tstates=radjust=0;
       reset_flag = 0;
     }
+
+    correctSpeed();
   }
 }
-
-

@@ -252,15 +252,6 @@ out(int h, int l, int a)
   return(0);
 }
 
-
-void
-fix_tstates(void)
-{
-  tstates=0;
-  pause();
-}
-
-
 void
 do_interrupt(void)
 {

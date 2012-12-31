@@ -32,7 +32,6 @@ extern unsigned int in(int h, int l);
 extern unsigned int out(int h,int l, int a);
 extern void do_interrupt(void);
 extern void mainloop(void);
-extern void fix_tstates(void);
 
 void reset_ace(void);
 
