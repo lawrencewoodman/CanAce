@@ -44,7 +44,20 @@ unsigned char partable[256] = {
   4, 0, 0, 4, 0, 4, 4, 0, 0, 4, 4, 0, 4, 0, 0, 4
 };
 
+/*  Number of tstates during each vertical refresh
+ * (cpu hz / vertical refresh interrupts per second)
+ */
+const unsigned long tstatesPerVRefresh = (3250000 / 50);
+
 static int reset_flag = 0;
+
+/*
+ * Vertical refresh interrupted states:
+ *   0 No interrupt
+ *   1 Interrupted
+ */
+static int vRefreshInt = 0;
+static unsigned long tstates=0;
 
 void
 reset_ace(void)
@@ -53,22 +66,24 @@ reset_ace(void)
   memset(mem+8192, 0xff, 57344);
 }
 
+// Synchronize the emulation with the timed interrupt and notify when
+// simulated vertical refresh interrupt should happen
 void
-correctSpeed(void)
+syncIntWithEmuSpeed(void)
 {
-  extern unsigned long tstates;
-  extern unsigned long tsmax;
+  extern int warpMode;
 
-  if (tstates > tsmax) {
+  if (tstates >= tstatesPerVRefresh) {
+    vRefreshInt = 1;
     tstates = 0;
-    pause();
+    if (!warpMode)
+      pause();
   }
 }
 
 
 void
 mainloop(void) {
-  extern unsigned long tstates;
   unsigned char a, f, b, c, d, e, h, l;
   unsigned char r, a1, f1, b1, c1, d1, e1, h1, l1, i, iff1, iff2, im;
   unsigned short pc;
@@ -95,11 +110,13 @@ mainloop(void) {
       #include "z80ops.c"
     }
 
-    if(interrupted == 1 && intsample && iff1) {
+    syncIntWithEmuSpeed();
+
+    if(vRefreshInt == 1 && intsample && iff1) {
       do_interrupt();
       push2(pc);
       pc=0x38;
-      interrupted=0;
+      vRefreshInt=0;
     }
 
     if (reset_flag) {
@@ -111,6 +128,5 @@ mainloop(void) {
       reset_flag = 0;
     }
 
-    correctSpeed();
   }
 }

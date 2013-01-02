@@ -92,6 +92,8 @@ spooler_read_char(void)
 void
 spooler_read(void)
 {
+  if (!spooler_active) return;
+
   switch (spooler_state) {
     case SPOOLER_READ_CHAR:
       spooler_state = SPOOLER_CLEAR_CHAR;

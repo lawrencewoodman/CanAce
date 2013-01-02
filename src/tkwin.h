@@ -17,4 +17,5 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 int TkWin_init(void);
+void TkWin_checkEvents(void);
 char *TkWin_getWindowID(void);

@@ -137,22 +137,9 @@ proc BindEvents {} {
   bind . <FocusOut> {KeyAutoRepeat on}
 }
 
-# Reads a char from the spool file every x milliseconds
-proc SpoolerTimer {} {
-  SpoolRead
-  if {[expr {[GetSpeed] > 4}]} {
-    set delay 15
-  } else {
-    set delay 40
-  }
-  after idle [list after $delay {SpoolerTimer}]
-}
-
 CreateWindow
 CreateMenu
 CreateScreen
 CreateStatusBar
-
-SpoolerTimer
 
 BindEvents

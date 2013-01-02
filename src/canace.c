@@ -56,29 +56,23 @@ unsigned char *memptr[8] = {
   mem+0xe000
 };
 
-unsigned long tstates=0,tsmax=65000;
-
 int memattr[8]={0,1,1,1,1,1,1,1}; /* 8K RAM Banks */
 
-
-/*
- * interrupted states:
- *   0 No interrupt
- *   1 Interrupted
- */
-volatile int interrupted=0;
+static volatile timedInterrupt = 0;
+int warpMode = 0;
 
 /* Prototypes */
 void loadrom(unsigned char *x);
 void startup(int *argc, char **argv);
-void check_events(void);
 void closedown(void);
 
-/* Handle the SIGALRM signal used for the Ace's interrupt */
+/* Handle the SIGALRM signal used to sync the emulation speed,
+ * check for tk events and refresh the screen.
+ */
 void
 sigint_handler(int signum)
 {
-  if (interrupted == 0) interrupted = 1;
+  timedInterrupt = 1;
 }
 
 /* Handle any Signals to do with quiting the program */
@@ -106,15 +100,15 @@ set_itimer(int ints_per_sec)
 static void
 normal_speed(void)
 {
-  set_itimer(50);    /* 50 ints/sec */
-  tsmax = 65000;
+  set_itimer(50);
+  warpMode = 0;
 }
 
 static void
-fast_speed(void)
+warp_speed(void)
 {
-  set_itimer(250);  /* 250 ints/sec */
-  tsmax = 325000;
+  set_itimer(50);
+  warpMode = 1;
 }
 
 void
@@ -127,7 +121,7 @@ handle_cli_args(int argc, char **argv)
     cli_switch = argv[arg_pos];
     if (strcasecmp("-s", cli_switch) == 0) {
       if (strcmp("-S", cli_switch) == 0) {
-        fast_speed();
+        warp_speed();
       }
 
       if (++arg_pos < argc) {
@@ -167,19 +161,6 @@ error:
   perror("sigaction failed");
   exit(1);
 }
-
-void
-check_events(void)
-{
-  SDL_Event event;
-
-  if ((SDL_PollEvent(&event) && event.type == SDL_QUIT)) {
-    // FIX: Handle the quit event
-  } else {
-    Tk_DoOneEvent(TK_ALL_EVENTS|TK_DONT_WAIT);
-  }
-}
-
 
 int
 main(int argc, char **argv)
@@ -255,8 +236,20 @@ out(int h, int l, int a)
 void
 do_interrupt(void)
 {
-  AceScreen_refresh();
-  check_events();
+  static int count=0;
+
+  count++;
+  if (count >= 4) {
+    count=0;
+    spooler_read();
+  }
+
+  if (timedInterrupt) {
+    AceScreen_refresh();
+    TkWin_checkEvents();
+    timedInterrupt = 0;
+  }
+
 }
 
 void
