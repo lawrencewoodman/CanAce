@@ -46,7 +46,7 @@ typedef enum {
   AceKey_S = 0x53, AceKey_s = 0x73, AceKey_T = 0x54, AceKey_t = 0x74,
   AceKey_U = 0x55, AceKey_u = 0x75, AceKey_V = 0x56, AceKey_v = 0x76,
   AceKey_W = 0x57, AceKey_w = 0x77, AceKey_X = 0x58, AceKey_x = 0x78,
-  AceKey_Y = 0x59, AceKey_y = 0x79, AceKey_Z = 0x5A, AceKey_z = 0x80,
+  AceKey_Y = 0x59, AceKey_y = 0x79, AceKey_Z = 0x5A, AceKey_z = 0x7A,
   AceKey_less = 0x3C, AceKey_greater = 0x3E,
   AceKey_bracketleft = 0x5B, AceKey_bracketright = 0x5D,
   AceKey_copyright,
