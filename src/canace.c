@@ -62,7 +62,6 @@ static volatile timedInterrupt = 0;
 int warpMode = 0;
 
 /* Prototypes */
-void loadrom(unsigned char *x);
 void startup(int *argc, char **argv);
 void closedown(void);
 
@@ -165,15 +164,14 @@ error:
 int
 main(int argc, char **argv)
 {
-  loadrom(mem);
-  tape_patches(mem);
-  memset(mem+8192, 0xff, 57344);
-
-  if (!TkWin_init())
+  if (!TkWin_init(mem))
     return EXIT_FAILURE;
 
   if (!AceScreen_init(TkWin_getWindowID(), SCALE, mem+0x2400, mem+0x2C00))
     return EXIT_FAILURE;
+
+  tape_patches(mem);
+  memset(mem+8192, 0xff, 57344);
 
   spooler_init(TkSpooler_observer, keyboard_clear, keyboard_keypress,
                normal_speed);
@@ -185,28 +183,6 @@ main(int argc, char **argv)
 
   mainloop();
 }
-
-void
-loadrom(unsigned char *x)
-{
-  FILE *in;
-
-  if((in=fopen("ace.rom", "rb"))!=NULL)
-  {
-    if (fread(x,1,8192,in) != 8192) {
-      printf("Couldn't load ROM.\n");
-      fclose(in);
-      exit(1);
-    }
-    fclose(in);
-  }
-  else
-  {
-    printf("Couldn't load ROM.\n");
-    exit(1);
-  }
-}
-
 
 unsigned int
 in(int h, int l)
@@ -225,7 +201,6 @@ in(int h, int l)
     }
   return(255);
 }
-
 
 unsigned int
 out(int h, int l, int a)

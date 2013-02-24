@@ -9,4 +9,5 @@ include_directories(${SDL_INCLUDE_DIR})
 
 target_link_libraries(canace ${SDL_LIBRARY} ${TCL_LIBRARY} ${TK_LIBRARY})
 
-install(TARGETS canace DESTINATION bin)
+install(PROGRAMS canace DESTINATION bin)
+install(FILES ../ace.rom DESTINATION share/canace)

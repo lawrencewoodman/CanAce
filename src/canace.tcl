@@ -16,6 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
+package require xdgbasedir
 
 proc HandleEmuKey {key} {
   switch -- $key {
@@ -33,6 +34,24 @@ proc KeyAutoRepeat {toggle} {
     exec xset r on
   } else {
     exec xset r off
+  }
+}
+
+proc ROMLocation {} {
+  set searchDirs [concat [XDG::DATA_HOME canace] [XDG::DATA_DIRS canace]]
+
+  foreach dir $searchDirs {
+    set romLocation [file join $dir ace.rom]
+    if {[file exists $romLocation]} {
+      return $romLocation;
+    }
+  }
+  return {};
+}
+
+proc SetupACE {} {
+  if {![LoadROM [ROMLocation]]} {
+    error "Error: Couldn't load the ACE ROM"
   }
 }
 
@@ -144,3 +163,5 @@ CreateScreen
 CreateStatusBar
 
 BindEvents
+
+SetupACE

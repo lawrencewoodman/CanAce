@@ -16,6 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-int TkWin_init(void);
+int TkWin_init(unsigned char *_mem);
 void TkWin_checkEvents(void);
 char *TkWin_getWindowID(void);

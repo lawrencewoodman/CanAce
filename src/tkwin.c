@@ -29,13 +29,15 @@
 #include "tktape.h"
 
 static Tcl_Interp *interp;
+static unsigned char *mem;
 
 static int TkWin_displayWindow(void);
 static void TkWin_createCommands(void);
 
 int
-TkWin_init(void)
+TkWin_init(unsigned char *_mem)
 {
+  mem = _mem;
   interp = Tcl_CreateInterp();
   if (Tcl_Init(interp) == TCL_ERROR) { return 0; }
   if (Tk_Init(interp) == TCL_ERROR) { return 0; }
@@ -140,14 +142,36 @@ static int
 GetCanAceVersionCmd(ClientData clientData, Tcl_Interp *_interp,
                     int objc, Tcl_Obj *CONST objv[])
 {
-  int scale;
-
   if (objc != 1) {
     Tcl_WrongNumArgs(_interp, 1, objv, "");
   }
 
   Tcl_SetObjResult(_interp, Tcl_NewStringObj(CANACE_VERSION, -1));
 
+  return TCL_OK;
+}
+
+static int
+LoadROMCmd(ClientData clientData, Tcl_Interp *_interp,
+           int objc, Tcl_Obj *CONST objv[])
+{
+  FILE *fp;
+  char *filename;
+  int  success = 0;
+
+  if (objc != 2) {
+    Tcl_WrongNumArgs(_interp, 2, objv, "ROMfilename");
+  }
+
+  filename = Tcl_GetString(objv[1]);
+
+  if ( (fp=fopen(filename, "rb")) != NULL) {
+    if (fread(mem, 1, 8192, fp) == 8192)
+      success = 1;
+    fclose(fp);
+  }
+
+  Tcl_SetObjResult(_interp, Tcl_NewBooleanObj(success));
   return TCL_OK;
 }
 
@@ -172,6 +196,10 @@ TkWin_createCommands(void)
                        (Tcl_CmdDeleteProc *) NULL);
 
   Tcl_CreateObjCommand(interp, "GetCanAceVersion", GetCanAceVersionCmd,
+                       (ClientData) NULL,
+                       (Tcl_CmdDeleteProc *) NULL);
+
+  Tcl_CreateObjCommand(interp, "LoadROM", LoadROMCmd,
                        (ClientData) NULL,
                        (Tcl_CmdDeleteProc *) NULL);
 

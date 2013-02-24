@@ -15,6 +15,7 @@ Requirements
 ------------
 *  A C/C++ compiler (Currently tested with gcc and g++)
 *  Tcl/Tk 8.5+ and development files
+*  xdgbasedir Tcl module (Available on github: [xdgbasedir_tcl](https://github.com/LawrenceWoodman/xdgbasedir_tcl))
 *  SDL Library and development files
 *  CMake 2.8+ (To compile)
 
@@ -30,13 +31,11 @@ Then compile the project:
 
     $ make
 
-The binary executable will now be in `src/`, to install it to a sensible
-location such as `/usr/local/bin` run the following as root:
+To install the executable and the ROM to a sensible location run the following as root:
 
     $ make install
 
-For the moment CanAce must be run from the same directory as the ROM image.
-So from the current directory run:
+You can now run CanAce:
 
     $ canace
 
