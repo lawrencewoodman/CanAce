@@ -37,6 +37,9 @@ static void TkWin_createCommands(void);
 int
 TkWin_init(unsigned char *_mem)
 {
+  // Include canace.tcl which has been converted to a char array using xxd -i
+  #include "canace.tcl.h"
+
   mem = _mem;
   interp = Tcl_CreateInterp();
   if (Tcl_Init(interp) == TCL_ERROR) { return 0; }
@@ -46,8 +49,9 @@ TkWin_init(unsigned char *_mem)
   TkSpooler_init(interp);
   TkTape_init(interp);
 
-  if (Tcl_EvalFile(interp, "src/canace.tcl") == TCL_ERROR ) {
-    fprintf(stderr, "Error: Can't eval src/canace.tcl\n");
+  if (Tcl_EvalEx(interp, canace_tcl, canace_tcl_len, 0) == TCL_ERROR ) {
+    fprintf(stderr, "Error in embedded canace.tcl\n");
+    fprintf(stderr, "%s\n", Tcl_GetStringResult(interp));
     return 0;
   }
 

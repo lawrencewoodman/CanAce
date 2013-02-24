@@ -1,6 +1,10 @@
 # Object files
 *.o
 
+# Files used to embed src/canace.tcl in executable at compile time
+src/libtkwin.a
+src/canace.tcl.h
+
 # Executables
 src/canace
 tests/tape_test
